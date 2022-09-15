@@ -24,6 +24,7 @@ def get_appdata(appname):
     )
 
     general_info_data = {key: data[key] for key in general_info_cols}
+    general_info_data.update(store="playstore")
     stats_data = {key: data[key] for key in stats_cols}
 
     # print(general_info_data)
