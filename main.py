@@ -14,6 +14,16 @@ stats_cols = ["installs", "minInstalls",
 
 
 def get_appdata(appname):
+    '''
+    Returns general info and stats for an app
+
+            Parameters:
+                    appname (str): name of the app
+
+            Returns:
+                    general_info_data (dict): general info about the app
+                    stats_data (dict): stats info about the app
+    '''
     # print(f"data for app : {appname}")
     # print(f"-----------")
 
