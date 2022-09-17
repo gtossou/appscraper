@@ -13,6 +13,8 @@ APPS = {
     "teymounekh": "com.teymounekh",
     "freelance_africa": "freelance.africa"
 }
+LANG = "en"
+COUNTRY = "us"
 
 GENERAL_INFO_COLS = ["title", "description", "summary"]
 STATS_COLS = ["installs", "minInstalls",
@@ -35,8 +37,8 @@ def get_appdata(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
     data = app(
         appid,
-        lang='en',
-        country='us'
+        lang=LANG,
+        country=COUNTRY
     )
 
     GENERAL_INFO_COLS = ["title", "description", "summary"]
