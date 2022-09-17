@@ -16,12 +16,8 @@ APPS = {
 LANG = "en"
 COUNTRY = "us"
 
-GENERAL_INFO_COLS = ["title", "description", "summary"]
-STATS_COLS = ["installs", "minInstalls",
-              "realInstalls", "score", "ratings", "reviews"]
 
-
-def get_appdata(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+def getAppData(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     '''
     Returns general info and stats for an app
 
@@ -41,20 +37,20 @@ def get_appdata(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         country=COUNTRY
     )
 
-    GENERAL_INFO_COLS = ["title", "description", "summary"]
-    STATS_COLS = ["installs", "minInstalls",
-                  "realInstalls", "score", "ratings", "reviews"]
+    APP_INFO_COLS = ["title", "description", "summary"]
+    APP_STATS_COLS = ["installs", "minInstalls",
+                      "realInstalls", "score", "ratings", "reviews"]
 
-    general_info_data = {key: data[key] for key in GENERAL_INFO_COLS}
-    general_info_data.update(store="playstore")
-    stats_data = {key: data[key] for key in STATS_COLS}
+    app_info_data = {key: data[key] for key in APP_INFO_COLS}
+    app_info_data.update(store="playstore")
+    app_stats_data = {key: data[key] for key in APP_STATS_COLS}
 
     # print(general_info_data)
     # print("_____________")
     # print(stats_data)
-    return general_info_data, stats_data
+    return app_info_data, app_stats_data
 
 
 if __name__ == "__main__":
     for appkey, appid_ in APPS.items():
-        get_appdata(appid_)
+        getAppData(appid_)
