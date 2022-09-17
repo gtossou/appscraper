@@ -6,7 +6,7 @@ from typing import Any, Dict, Tuple
 
 from google_play_scraper import app
 
-apps = {
+APPS = {
     "aurion": "com.Kiroogames.AurionKGF",
     "gozem": "com.gozem",
     "senego": "com.nextwebart.senego",
@@ -14,8 +14,8 @@ apps = {
     "freelance_africa": "freelance.africa"
 }
 
-general_info_cols = ["title", "description", "summary"]
-stats_cols = ["installs", "minInstalls",
+GENERAL_INFO_COLS = ["title", "description", "summary"]
+STATS_COLS = ["installs", "minInstalls",
               "realInstalls", "score", "ratings", "reviews"]
 
 
@@ -39,9 +39,13 @@ def get_appdata(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         country='us'
     )
 
-    general_info_data = {key: data[key] for key in general_info_cols}
+    GENERAL_INFO_COLS = ["title", "description", "summary"]
+    STATS_COLS = ["installs", "minInstalls",
+                  "realInstalls", "score", "ratings", "reviews"]
+
+    general_info_data = {key: data[key] for key in GENERAL_INFO_COLS}
     general_info_data.update(store="playstore")
-    stats_data = {key: data[key] for key in stats_cols}
+    stats_data = {key: data[key] for key in STATS_COLS}
 
     # print(general_info_data)
     # print("_____________")
@@ -50,5 +54,5 @@ def get_appdata(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
 
 if __name__ == "__main__":
-    for appkey, appid_ in apps.items():
+    for appkey, appid_ in APPS.items():
         get_appdata(appid_)
