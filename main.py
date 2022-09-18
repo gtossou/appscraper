@@ -2,20 +2,24 @@
 Main function to get app general info and stats
 """
 
+import logging
 from typing import Any, Dict, Tuple
 
 from google_play_scraper import app
 from models.appinfo import AppInfo
 from models.appstats import AppStats
 from settings.db import ADRESS, DB_NAME, PASSWORD, PORT, USER
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, SQLModel, create_engine, select
+
+logging.getLogger().setLevel(logging.INFO)
 
 APPS = {
     "aurion": "com.Kiroogames.AurionKGF",
     "gozem": "com.gozem",
     "senego": "com.nextwebart.senego",
     "teymounekh": "com.teymounekh",
-    "freelance_africa": "freelance.africa"
+    "freelance_africa": "freelance.africa",
+    "m-pesa": "com.safaricom.mpesa.lifestyle"
 }
 LANG = "en"
 COUNTRY = "us"
@@ -66,14 +70,20 @@ def insertAppscraperDb(appdata, session):
     '''
     AppInfoData = AppInfo(id=appdata[0]["id"], title=appdata[0]["title"],
                           description=appdata[0]["description"], summary=appdata[0]["summary"])
-    AppStatsData = AppStats(installs=appdata[1]["installs"], mininstalls=appdata[1]["minInstalls"],
-                            realinstalls=appdata[1]["realInstalls"], score=appdata[1]["score"],
+    AppStatsData = AppStats(installs=appdata[1]["installs"], min_installs=appdata[1]["minInstalls"],
+                            real_installs=appdata[1]["realInstalls"], score=appdata[1]["score"],
                             ratings=appdata[1]["ratings"], reviews=appdata[1]["reviews"],
                             app_id=appdata[1]["appid"])
-
-    session.add(AppInfoData)
+    # Check if appid already exists
+    app_exists_query = select(AppInfo).where(AppInfo.id == appdata[0]["id"])
+    app_ = session.exec(app_exists_query).first()
+    if (app_):
+        logging.warning("App Id already exists")
+    else:
+        logging.info("Inserting new app into db")
+        session.add(AppInfoData)
+    logging.info("Inserting app stats into db")
     session.add(AppStatsData)
-    session.add()
     session.commit()
 
 
@@ -85,6 +95,10 @@ if __name__ == "__main__":
     SQLModel.metadata.create_all(engine_)
 
     for _, appid_ in APPS.items():
-        appdata = getAppData(appid_)
-        with Session(engine_) as session:
-            insertAppscraperDb(appdata, session)
+
+        try:
+            appdata = getAppData(appid_)
+            with Session(engine_) as session:
+                insertAppscraperDb(appdata, session)
+        except Exception as e:
+            logging.error(e)
