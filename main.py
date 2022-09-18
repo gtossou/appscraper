@@ -55,7 +55,7 @@ def getAppData(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     return app_info_data, app_stats_data
 
 
-# TODO handle upsert
+# TODO handle upsert // update if exists
 def insertAppscraperDb(appdata, session):
     '''
     Insert into db models appstats and appinfo
