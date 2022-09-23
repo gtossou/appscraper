@@ -6,10 +6,10 @@ import logging
 from typing import Any, Dict, Tuple
 
 from google_play_scraper import app
-from models.appinfo import AppInfo
-from models.appstats import AppStats
+from models.scrappermodel import AppInfo, AppStats
 from settings.db import ADRESS, DB_NAME, PASSWORD, PORT, USER
 from sqlmodel import Session, SQLModel, create_engine, select
+from psycopg2 import OperationalError
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -21,11 +21,25 @@ APPS = {
     "freelance_africa": "freelance.africa",
     "m-pesa": "com.safaricom.mpesa.lifestyle"
 }
-LANG = "en"
-COUNTRY = "us"
+DEFAULT_LANGUAGE = "en"
+DEFAULT_COUNTRY = "us"
+
+STORES = {
+    "google": "playstore",
+    "apple": "apple_store"
+}
 
 
-def getAppData(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+def create_sql_engine(USER: str, PASSWORD: str, ADRESS: str, PORT: int, DB_NAME: str) -> None:
+    try:
+        return create_engine(
+            f"postgresql://{USER}:{PASSWORD}@{ADRESS}:{PORT}/{DB_NAME}")
+    except OperationalError as e:
+        logging.error("Unable to connect to the database")
+        return None
+
+
+def get_app_data(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     '''
     Returns general info and stats for an app
 
@@ -39,8 +53,8 @@ def getAppData(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
     data = app(
         appid,
-        lang=LANG,
-        country=COUNTRY
+        lang=DEFAULT_LANGUAGE,
+        country=DEFAULT_COUNTRY
     )
 
     APP_INFO_COLS = ["title", "description", "summary"]
@@ -48,7 +62,7 @@ def getAppData(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
                       "realInstalls", "score", "ratings", "reviews"]
 
     app_info_data = {key: data[key] for key in APP_INFO_COLS}
-    app_info_data.update(id=appid, store="playstore")
+    app_info_data.update(id=appid, store=STORES["google"])
     app_stats_data = {key: data[key] for key in APP_STATS_COLS}
     app_stats_data.update(appid=appid)
 
@@ -56,7 +70,7 @@ def getAppData(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
 
 # TODO handle upsert // update if exists
-def insertAppscraperDb(appdata, session):
+def insert_appscraper_db(appdata, session):
     '''
     Insert into db models appstats and appinfo
 
@@ -77,7 +91,7 @@ def insertAppscraperDb(appdata, session):
     # Check if appid already exists
     app_exists_query = select(AppInfo).where(AppInfo.id == appdata[0]["id"])
     app_ = session.exec(app_exists_query).first()
-    if (app_):
+    if app_ is not None:
         logging.warning("App Id already exists")
     else:
         logging.info("Inserting new app into db")
@@ -89,16 +103,14 @@ def insertAppscraperDb(appdata, session):
 
 if __name__ == "__main__":
 
-    engine_ = create_engine(
-        f"postgresql://{USER}:{PASSWORD}@{ADRESS}:{PORT}/{DB_NAME}")
+    engine_ = create_sql_engine(USER, PASSWORD, ADRESS, PORT, DB_NAME)
 
-    SQLModel.metadata.create_all(engine_)
+    if engine_ is not None:
+        SQLModel.metadata.create_all(engine_)
 
-    for _, appid_ in APPS.items():
+        for _, appid_ in APPS.items():
 
-        try:
-            appdata = getAppData(appid_)
+            appdata = get_app_data(appid_)
             with Session(engine_) as session:
-                insertAppscraperDb(appdata, session)
-        except Exception as e:
-            logging.error(e)
+                insert_appscraper_db(appdata, session)
+                # logging.error(e)

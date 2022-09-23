@@ -8,6 +8,13 @@ from typing import Optional
 from sqlmodel import Field, SQLModel
 
 
+class AppInfo(SQLModel, table=True):
+    id: str = Field(primary_key=True)
+    title: str = Field(default=None)
+    description: str = Field(default=None)
+    summary: str = Field(default=None)
+
+
 class AppStats(SQLModel, table=True):
     installs: str = Field(index=True)
     min_installs: int = Field(default=0)
