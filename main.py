@@ -2,6 +2,7 @@
 Main function to get app general info and stats
 """
 
+from datetime import datetime
 import logging
 from typing import Any, Dict, Tuple
 
@@ -32,8 +33,9 @@ STORES = {
 
 def create_sql_engine(USER: str, PASSWORD: str, ADRESS: str, PORT: int, DB_NAME: str) -> None:
     try:
-        return create_engine(
-            f"postgresql://{USER}:{PASSWORD}@{ADRESS}:{PORT}/{DB_NAME}")
+        return create_engine('sqlite:///mydb.db', echo=True)
+        # create_engine(
+        #     f"postgresql://{USER}:{PASSWORD}@{ADRESS}:{PORT}/{DB_NAME}")
     except OperationalError as e:
         logging.error("Unable to connect to the database")
         return None
@@ -77,7 +79,7 @@ def insert_appscraper_db(appdata, session):
             Parameters:
 
                 session (str): database session
-                appdara (Tuple[Dict[str, Any], Dict[str, Any]) : data about appinfo and appstats
+                appdata (Tuple[Dict[str, Any], Dict[str, Any]) : data about appinfo and appstats
 
             Returns:
                 Inserted data
@@ -86,13 +88,17 @@ def insert_appscraper_db(appdata, session):
                           description=appdata[0]["description"], summary=appdata[0]["summary"])
     AppStatsData = AppStats(installs=appdata[1]["installs"], min_installs=appdata[1]["minInstalls"],
                             real_installs=appdata[1]["realInstalls"], score=appdata[1]["score"],
-                            ratings=appdata[1]["ratings"], reviews=appdata[1]["reviews"],
-                            app_id=appdata[1]["appid"])
+                            ratings=appdata[1]["ratings"], reviews=appdata[1]["reviews"], app_id=AppInfoData.id)
     # Check if appid already exists
     app_exists_query = select(AppInfo).where(AppInfo.id == appdata[0]["id"])
-    app_ = session.exec(app_exists_query).first()
+    app_ = session.exec(app_exists_query).one()
     if app_ is not None:
         logging.warning("App Id already exists")
+        # app_.title = appdata[0]["title"]
+        # app_.title = appdata[0]["title"]
+        # app_.description = appdata[0]["description"]
+        # app_.summary = appdata[0]["summary"]
+        # session.add(AppInfoData)
     else:
         logging.info("Inserting new app into db")
         session.add(AppInfoData)
