@@ -84,14 +84,9 @@ def insert_appscraper_db(appdata, session):
             Returns:
                 Inserted data
     '''
-    AppInfoData = AppInfo(id=appdata[0]["id"], title=appdata[0]["title"],
-                          description=appdata[0]["description"], summary=appdata[0]["summary"])
-    AppStatsData = AppStats(installs=appdata[1]["installs"], min_installs=appdata[1]["minInstalls"],
-                            real_installs=appdata[1]["realInstalls"], score=appdata[1]["score"],
-                            ratings=appdata[1]["ratings"], reviews=appdata[1]["reviews"], app_id=AppInfoData.id)
     # Check if appid already exists
     app_exists_query = select(AppInfo).where(AppInfo.id == appdata[0]["id"])
-    app_ = session.exec(app_exists_query).one()
+    app_ = session.exec(app_exists_query).one_or_none()
     if app_ is not None:
         logging.warning("App Id already exists")
         # app_.title = appdata[0]["title"]
@@ -99,10 +94,23 @@ def insert_appscraper_db(appdata, session):
         # app_.description = appdata[0]["description"]
         # app_.summary = appdata[0]["summary"]
         # session.add(AppInfoData)
+        AppInfoData = app_
     else:
         logging.info("Inserting new app into db")
+        AppInfoData = AppInfo(title=appdata[0]["title"],
+                              description=appdata[0]["description"],
+                              summary=appdata[0]["summary"])
         session.add(AppInfoData)
+        session.commit()
+
     logging.info("Inserting app stats into db")
+    AppStatsData = AppStats(installs=appdata[1]["installs"],
+                            min_installs=appdata[1]["minInstalls"],
+                            real_installs=appdata[1]["realInstalls"],
+                            score=appdata[1]["score"],
+                            ratings=appdata[1]["ratings"],
+                            reviews=appdata[1]["reviews"],
+                            app_id=AppInfoData.id)
     session.add(AppStatsData)
     session.commit()
 
