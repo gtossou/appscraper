@@ -28,5 +28,5 @@ class AppStats(SQLModel, table=True):
     reviews: int = Field(default=0)
     last_update: datetime = Field(
         default_factory=datetime.utcnow, nullable=False)
-    app_id: str = Field(default=None, foreign_key="appinfo.id")
+    app_id: Optional[int] = Field(default=None, foreign_key="appinfo.id")
     appinfo: Optional[AppInfo] = Relationship(back_populates="stats")
