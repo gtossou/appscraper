@@ -20,7 +20,8 @@ APPS = {
     "senego": "com.nextwebart.senego",
     "teymounekh": "com.teymounekh",
     "freelance_africa": "freelance.africa",
-    "m-pesa": "com.safaricom.mpesa.lifestyle"
+    "m-pesa": "com.safaricom.mpesa.lifestyle",
+    "MyMTN": "com.mtn1app",
 }
 DEFAULT_LANGUAGE = "en"
 DEFAULT_COUNTRY = "us"
@@ -85,7 +86,7 @@ def insert_appscraper_db(appdata, session):
                 Inserted data
     '''
     # Check if appid already exists
-    app_exists_query = select(AppInfo).where(AppInfo.id == appdata[0]["id"])
+    app_exists_query = select(AppInfo).where(AppInfo.appurl == appdata[0]["id"])
     app_ = session.exec(app_exists_query).one_or_none()
     if app_ is not None:
         logging.warning("App Id already exists")
@@ -97,7 +98,8 @@ def insert_appscraper_db(appdata, session):
         AppInfoData = app_
     else:
         logging.info("Inserting new app into db")
-        AppInfoData = AppInfo(title=appdata[0]["title"],
+        AppInfoData = AppInfo(appurl=appdata[0]["id"],
+                              title=appdata[0]["title"],
                               description=appdata[0]["description"],
                               summary=appdata[0]["summary"])
         session.add(AppInfoData)

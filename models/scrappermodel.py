@@ -10,6 +10,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 class AppInfo(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    appurl: str = Field(default=None)
     title: str = Field(default=None)
     description: str = Field(default=None)
     summary: str = Field(default=None)
