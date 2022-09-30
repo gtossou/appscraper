@@ -1,7 +1,7 @@
 from email import message
-from flask_wtf import FlaskForm
-from wtforms import StringField, TextField, SubmitField
-from wtforms.validators import DataRequired, Length
+from flask_wtf import FlaskForm, RecaptchaField
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 
 class AddAppForm(FlaskForm):
@@ -18,13 +18,13 @@ class AddAppForm(FlaskForm):
         ]
     )
     appname = StringField(
-        "Nom de l'application mobile",
+        "Nom de l'App",
         [
             DataRequired()
         ]
     )
     appurl = StringField(
-        "Url de l'application mobile",
+        "Url de l'App (Android Store)",
     )
 
     recaptcha = RecaptchaField()
