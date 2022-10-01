@@ -8,6 +8,14 @@ from typing import List, Optional
 from sqlmodel import Field, Relationship, SQLModel
 
 
+class AppCollect(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str = Field(default=None)
+    email: str = Field(default=None)
+    appname: str = Field(default=None)
+    appurl: str = Field(default=None)
+
+
 class AppInfo(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     appurl: str = Field(default=None)
