@@ -4,16 +4,21 @@ Main function to get app general info and stats
 
 from datetime import datetime
 import logging
+import os
 from typing import Any, Dict, Tuple
 
 from google_play_scraper import app
-from models.scrappermodel import AppInfo, AppStats
-from settings.db import ADRESS, DB_NAME, PASSWORD, PORT, USER
 from sqlmodel import Session, SQLModel, create_engine, select
 from psycopg2 import OperationalError
+from dotenv import load_dotenv
+
+from .models import AppInfo, AppStats
 
 logging.getLogger().setLevel(logging.INFO)
 
+load_dotenv()
+
+DATABASE_URL = os.environ["DATABASE_URL"]
 APPS = {
     "aurion": "com.Kiroogames.AurionKGF",
     "gozem": "com.gozem",
@@ -32,14 +37,8 @@ STORES = {
 }
 
 
-def create_sql_engine(USER: str, PASSWORD: str, ADRESS: str, PORT: int, DB_NAME: str) -> None:
-    try:
-        return create_engine('sqlite:///mydb.db', echo=True)
-        # create_engine(
-        #     f"postgresql://{USER}:{PASSWORD}@{ADRESS}:{PORT}/{DB_NAME}")
-    except OperationalError as e:
-        logging.error("Unable to connect to the database")
-        return None
+def create_sql_engine() -> None:
+    return create_engine(DATABASE_URL, echo=True)
 
 
 def get_app_data(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
@@ -119,7 +118,7 @@ def insert_appscraper_db(appdata, session):
 
 if __name__ == "__main__":
 
-    engine_ = create_sql_engine(USER, PASSWORD, ADRESS, PORT, DB_NAME)
+    engine_ = create_sql_engine()
 
     if engine_ is not None:
         SQLModel.metadata.create_all(engine_)
