@@ -1,0 +1,8 @@
+Flask==2.2.2
+Flask_WTF==1.0.1
+google_play_scraper==1.2.2
+psycopg2==2.9.4
+psycopg2_binary==2.9.3
+python-dotenv==0.21.0
+sqlmodel==0.0.8
+WTForms==3.0.1
