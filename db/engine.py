@@ -12,7 +12,7 @@ from sqlmodel import Session, SQLModel, create_engine, select
 from psycopg2 import OperationalError
 from dotenv import load_dotenv
 
-from .models import AppInfo, AppStats
+from ..db.models import AppInfo, AppStats
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -85,7 +85,8 @@ def insert_appscraper_db(appdata, session):
                 Inserted data
     '''
     # Check if appid already exists
-    app_exists_query = select(AppInfo).where(AppInfo.appurl == appdata[0]["id"])
+    app_exists_query = select(AppInfo).where(
+        AppInfo.appurl == appdata[0]["id"])
     app_ = session.exec(app_exists_query).one_or_none()
     if app_ is not None:
         logging.warning("App Id already exists")
