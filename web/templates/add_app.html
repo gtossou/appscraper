@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Ajouter une application</h1>
+<form method="post">
+    <label for="userName">Nom et prénom:</label>
+    <input type="text" id="userName" name="user_name" />
+    <br>
+    <label for="userMail">Votre mail:</label>
+    <input type="text" id="userMail" name="user_mail" />
+    <br>
+    <label for="appName">Nom de l'application:</label>
+    <input type="text" id="appName" name="app_name" />
+    <br>
+    <label for="appUrl">Url de l'application:</label>
+    <input type="text" id="appUrl" name="app_url" />
+    <br>
+    <input type="submit">
+</form>
+{% endblock %}

@@ -5,7 +5,8 @@ from flask import(
     Flask,
     url_for,
     render_template,
-    redirect
+    redirect,
+    request
 )
 from dotenv import load_dotenv
 
@@ -21,6 +22,8 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 def addapp():
     """Form to add a new app"""
     form = AddAppForm()
+    if request.method == "POST":
+        print("up")
     return render_template('index.html', form=form)
     # if form.validate_on_submit():
     #     # TODO: extract values from form and make AppInfo object

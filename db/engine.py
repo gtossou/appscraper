@@ -12,7 +12,7 @@ from sqlmodel import Session, SQLModel, create_engine, select
 from psycopg2 import OperationalError
 from dotenv import load_dotenv
 
-from models import AppInfo, AppStats
+from .models import AppInfo, AppStats
 
 logging.getLogger().setLevel(logging.INFO)
 
