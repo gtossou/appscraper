@@ -1,5 +1,4 @@
 import os
-from ..db.engine import AppInfo
 from .forms import AddAppForm
 from flask import(
     Flask,
@@ -16,6 +15,8 @@ app = Flask(__name__)
 
 load_dotenv()
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+
+# TODO : handle  Cross-Site Scripting (XSS) attack
 
 
 @app.route("/AddApp", methods=["GET", "POST"])
