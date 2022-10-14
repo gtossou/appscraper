@@ -2,15 +2,14 @@
 Main function to get app general info and stats
 """
 
-from datetime import datetime
 import logging
 import os
 from typing import Any, Dict, Tuple
 
-from google_play_scraper import app
-from sqlmodel import Session, SQLModel, create_engine, select
-from psycopg2 import OperationalError
 from dotenv import load_dotenv
+from google_play_scraper import app
+from psycopg2 import OperationalError
+from sqlmodel import Session, SQLModel, create_engine, select
 
 from models import AppInfo, AppStats
 
