@@ -29,3 +29,7 @@ class AddAppForm(FlaskForm):
     # TODO : add recaptcha -> https://john.soban.ski/add-recaptcha-to-your-flask-application.html
     #recaptcha = RecaptchaField()
     submit = SubmitField("Valider")
+
+
+class AddAppForm(FlaskForm):
+    pass

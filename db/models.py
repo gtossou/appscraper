@@ -4,7 +4,6 @@ SQL MODEL for appstats
 
 from datetime import datetime
 from typing import List, Optional
-
 from sqlmodel import Field, Relationship, SQLModel
 
 
