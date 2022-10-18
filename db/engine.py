@@ -10,12 +10,14 @@ from dotenv import load_dotenv
 from google_play_scraper import app
 from psycopg2 import OperationalError
 from sqlmodel import Session, SQLModel, create_engine, select
-
-from models import AppInfo, AppStats
+import sqlalchemy
+from db_models import AppInfo, AppStats
 
 logging.getLogger().setLevel(logging.INFO)
 
 load_dotenv()
+
+# TODO : Add duckdb for olap
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 APPS = {
@@ -36,7 +38,7 @@ STORES = {
 }
 
 
-def create_sql_engine() -> None:
+def create_sql_engine() -> sqlalchemy.Engine:
     return create_engine(DATABASE_URL, echo=True)
 
 

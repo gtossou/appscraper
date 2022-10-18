@@ -12,15 +12,16 @@ class AppCollect(SQLModel, table=True):
     username: str = None
     email: str = None
     appname: str = None
-    appurl: str = None
+    appurl: str
+    is_valid: Optional[bool] = False
 
 
 class AppInfo(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    appurl: str = None
-    title: str = None
-    description: str = None
-    summary: str = None
+    appurl: str
+    title: str
+    description: Optional[str] = None
+    summary: Optional[str] = None
     last_update: datetime = Field(
         default_factory=datetime.utcnow, nullable=False)
     approved: Optional[bool] = True

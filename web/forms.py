@@ -4,7 +4,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
 
 
-class AddAppForm(FlaskForm):
+class AddProspectAppForm(FlaskForm):
     """New app form"""
     username = StringField(
         "Votre nom",
@@ -29,7 +29,3 @@ class AddAppForm(FlaskForm):
     # TODO : add recaptcha -> https://john.soban.ski/add-recaptcha-to-your-flask-application.html
     #recaptcha = RecaptchaField()
     submit = SubmitField("Valider")
-
-
-class AddAppForm(FlaskForm):
-    pass
