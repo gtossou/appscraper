@@ -5,12 +5,13 @@ SQL MODEL for appstats
 from datetime import datetime
 from typing import List, Optional
 from sqlmodel import Field, Relationship, SQLModel
+from pydantic import EmailStr
 
 
-class AppCollect(SQLModel, table=True):
+class AppProspect(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = None
-    email: str = None
+    email: EmailStr
     appname: str = None
     appurl: str
     is_valid: Optional[bool] = False
