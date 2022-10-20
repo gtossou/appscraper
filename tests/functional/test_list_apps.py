@@ -1,7 +1,7 @@
 """
 This file (test_stocks.py) contains the functional tests for the app.py file.
 """
-from ...web.routes import app
+from web.routes import app
 
 
 def test_add_prospect_app_page():

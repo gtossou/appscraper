@@ -1,6 +1,6 @@
 import pytest
 
-from ...web.models import ProspectAppModel
+from web.models import ProspectAppModel
 
 
 def test_prospectapp_pmodel():
