@@ -12,7 +12,6 @@ from flask import(
 from dotenv import load_dotenv
 
 from pydantic import ValidationError
-# from .models import ProspectAppModel
 from db.db_models import AppProspect
 from db.engine import create_sql_engine
 from sqlmodel import Session, SQLModel, select
