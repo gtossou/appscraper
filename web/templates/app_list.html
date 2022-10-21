@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <h1>List des applications prospect</h1>
+
+    <table>
+        <!-- Table Header Row -->
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Mail</th>
+                <th>Nom de l'application</th>
+                <th>Url de l'application</th>
+            </tr>
+        </thead>
+
+        <!-- Table Element (Row) -->
+        <tbody>
+            <td>{{ session['user_name'] }}</td>
+            <td>{{ session['user_mail'] }}</td>
+            <td>${{ session['app_name'] }}</td>
+            <td>${{ session['app_url'] }}</td>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
