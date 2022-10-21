@@ -12,15 +12,30 @@
                 <th>Mail</th>
                 <th>Nom de l'application</th>
                 <th>Url de l'application</th>
+                <th>Admin step</th>
             </tr>
         </thead>
 
         <!-- Table Element (Row) -->
         <tbody>
-            <td>{{ session['user_name'] }}</td>
-            <td>{{ session['user_mail'] }}</td>
-            <td>${{ session['app_name'] }}</td>
-            <td>${{ session['app_url'] }}</td>
+          {% for app in data %}
+            <tr>
+              <td>{{ app.username }}</td>
+              <td>{{ app.email }}</td>
+              <td>{{ app.appname }}</td>
+              <td>{{ app.appurl }}</td>
+              <td>
+                {% if app.is_processed %}
+                  {{ app.is_valid }}
+                {% else %}
+                  <form method="post">
+                    <input type="submit" value="approve">
+                    <input type="submit" value="reject">
+                  </form>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
         </tbody>
     </table>
 </div>

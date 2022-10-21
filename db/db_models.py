@@ -14,7 +14,8 @@ class AppProspect(SQLModel, table=True):
     email: EmailStr
     appname: str = None
     appurl: str
-    is_valid: Optional[bool] = False
+    is_processed: bool = False
+    is_valid: bool = False
 
 
 class AppInfo(SQLModel, table=True):
@@ -25,7 +26,7 @@ class AppInfo(SQLModel, table=True):
     summary: Optional[str] = None
     last_update: datetime = Field(
         default_factory=datetime.utcnow, nullable=False)
-    approved: Optional[bool] = True
+    approved: bool = True
     stats: List["AppStats"] = Relationship(back_populates="appinfo")
 
 

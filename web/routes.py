@@ -7,13 +7,12 @@ from flask import(
     render_template,
     redirect,
     request,
-    session
 )
 from dotenv import load_dotenv
 
 from pydantic import ValidationError
 from db.db_models import AppProspect
-from db.engine import create_sql_engine
+from db.engine import create_sql_engine, get_pending_apps
 from sqlmodel import Session, SQLModel, select
 import logging
 
@@ -70,10 +69,6 @@ def add_app_prospect():
                 appname=request.form['app_name'],
                 appurl=request.form['app_url']
             )
-            session["user_name"] = prospect_app_data.username
-            session["user_mail"] = prospect_app_data.email
-            session["app_name"] = prospect_app_data.appname
-            session["app_url"] = prospect_app_data.appurl
 
             engine_ = create_sql_engine()
             if engine_ is not None:
@@ -90,5 +85,12 @@ def add_app_prospect():
 @app.route("/app_list", methods=["GET", "POST"])
 def show_app_list():
     """Form to list new apps"""
+    # TODO: how do we prevent anyone from approving stuff, at the
+    # very least use a @login_required decorator
+    engine_ = create_sql_engine()
+    with Session(engine_) as db_session:
+        data = get_pending_apps(db_session)
 
-    return render_template('app_list.html')
+    # TODO: handle the approve / reject form, if approved then add the
+    # app to the AppInfo table so it starts scraping
+    return render_template('app_list.html', data=data)

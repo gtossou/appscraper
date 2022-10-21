@@ -11,7 +11,7 @@ from google_play_scraper import app
 from psycopg2 import OperationalError
 from sqlmodel import Session, SQLModel, create_engine, select
 import sqlalchemy
-from .db_models import AppInfo, AppStats
+from .db_models import AppInfo, AppStats, AppProspect
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -70,6 +70,12 @@ def get_app_data(appid: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     app_stats_data.update(appid=appid)
 
     return app_info_data, app_stats_data
+
+
+def get_pending_apps(db_session):
+    query = select(AppProspect)
+    data = db_session.exec(statement=query).all()
+    return data
 
 
 # TODO handle upsert // update if exists
