@@ -50,6 +50,7 @@ def insert_app_prospect(db_session, prospect_app_data):
     app_ = db_session.exec(statement=app_exists_query).one_or_none()
     if app_ is not None:
         logging.warning("Prospect app already exists")
+    # TODO show warning in the dom ?
     else:
         logging.info("Inserting new app prospect into db")
         db_session.add(prospect_app_data)
@@ -71,10 +72,10 @@ def add_app_prospect():
                 appname=request.form['app_name'],
                 appurl=request.form['app_url']
             )
-            session["user_name"] = prospect_app_data.username
-            session["user_mail"] = prospect_app_data.email
-            session["app_name"] = prospect_app_data.appname
-            session["app_url"] = prospect_app_data.appurl
+            # session["user_name"] = prospect_app_data.username
+            # session["user_mail"] = prospect_app_data.email
+            # session["app_name"] = prospect_app_data.appname
+            # session["app_url"] = prospect_app_data.appurl
 
             engine_ = create_sql_engine()
             if engine_ is not None:

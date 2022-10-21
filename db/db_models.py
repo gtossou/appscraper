@@ -25,7 +25,7 @@ class AppInfo(SQLModel, table=True):
     summary: Optional[str] = None
     last_update: datetime = Field(
         default_factory=datetime.utcnow, nullable=False)
-    approved: Optional[bool] = True
+    approved: True
     stats: List["AppStats"] = Relationship(back_populates="appinfo")
 
 
